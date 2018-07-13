@@ -54,7 +54,7 @@
 		   	mvn compile 	(para compilar)
 		   	mvn package 	(para generar el jar -el plugin shade incluye todas las dependencias-)
 		   	mvn install 	(para generar el jar y añadirlo al repositorio m2)
-			mvn compile exec:java -Dexec.mainClass=csc.ProcesoCamel -Dexec.args="mi argumento"
+			mvn compile exec:java -Dexec.mainClass=ToniS.ProcesoCamel -Dexec.args="mi_argumento"
 			
 			Para ejecutar una vez empaquetado, se puede optar por alguna de las siguientes opciones:
 			java -jar ./target/plantillaCamel.jar "Mi parametro"
