@@ -14,6 +14,5 @@ Para empaquetar y ejecutar, podemos optar por alguna de las siguientes opciones:
 ```bash
 mvn package && java -jar ./target/plantillaCamel.jar "Mi parametro"
 mvn package && java -cp ./target/plantillaCamel.jar ToniS.ProcesoCamel "Mi parametro"
-
 ```
 
