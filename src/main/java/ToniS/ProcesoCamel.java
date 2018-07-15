@@ -8,7 +8,7 @@ import org.apache.camel.*;
 import org.apache.camel.main.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
-//import org.apache.camel.impl.DefaultCamelContext;
+
 
 public class ProcesoCamel {
  
@@ -57,8 +57,8 @@ public class ProcesoCamel {
 
             from("timer://temporizador?period=100")
             .process(new Processor() {
-                public void process(Exchange msg) {
-                    System.out.println("Procesando el parámetro: ");
+                public void process(Exchange msg) throws Exception {
+                    System.out.println("Procesando la propiedad:" + msg.getContext().resolvePropertyPlaceholders("{{mi.propiedad}}"));
                 }
             })
             .transform().simple("Esta es mi.propiedad ${properties:mi.propiedad}")
