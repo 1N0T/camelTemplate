@@ -7,11 +7,12 @@ import ToniS.*;
 import org.apache.camel.*;
 import org.apache.camel.main.*;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.component.properties.PropertiesComponent;
+//import org.apache.camel.impl.DefaultCamelContext;
 
 public class ProcesoCamel {
  
-    private org.apache.camel.main.Main contextoCamel;
+    private org.apache.camel.main.Main instanciaCamel;
     public static void main(String[] args) throws Exception {
         String miArgumento = args[0];	
     	ProcesoCamel proceso = new ProcesoCamel();
@@ -22,19 +23,19 @@ public class ProcesoCamel {
                        throws Exception {
 		
         // Creamos instancia de Main (permanece viva hasta se cancela la JVM)
-        contextoCamel = new org.apache.camel.main.Main();
+        instanciaCamel = new org.apache.camel.main.Main();
 
         // Añadimos rutas
-       	contextoCamel.addRouteBuilder(new MiRouteBuilder(miArgumento));
+       	instanciaCamel.addRouteBuilder(new MiRouteBuilder(miArgumento));
 
         // Añadimos listener de eventos
-        contextoCamel.addMainListener(new Events());
+        instanciaCamel.addMainListener(new Events());
  
         // Se ejecuta hasta que termine la JVM
         System.out.println("=====================================================");
         System.out.println("Iniciando Camel. Usa ctrl + c para terminar la JVM.  ");
         System.out.println("=====================================================");
-        contextoCamel.run();
+        instanciaCamel.run();
     }
  
     private static class MiRouteBuilder extends RouteBuilder {
@@ -60,6 +61,7 @@ public class ProcesoCamel {
                     System.out.println("Procesando el parámetro: ");
                 }
             })
+            .transform().simple("Esta es mi.propiedad ${properties:mi.propiedad}")
             .to("log:ToniS.ProcesoCamel?level=INFO");
         }
     }
@@ -74,6 +76,15 @@ public class ProcesoCamel {
             System.out.println("=====================");
             System.out.println("Camel se ha iniciado!");
             System.out.println("=====================");
+
+            // Recuperamos el contexto de main para modificar configuración
+            CamelContext ctx = main.getCamelContexts().get(0); 
+
+            // Es obligatorio registrarlo en el contexto con el nombre properties
+            PropertiesComponent pc = new PropertiesComponent();
+            pc.setLocation("classpath:/misPropiedades.properties");
+            ctx.addComponent("properties", pc);
+
         }
  
         @Override
